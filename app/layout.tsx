@@ -35,7 +35,7 @@ export default function RootLayout({
       <head />
       <body className={poppins.variable}>
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-          <main className="min-h-screen w-full flex justify-center items-center ">
+          <main className="min-h-screen flex justify-center items-center ">
             {children}
           </main>
         </Providers>

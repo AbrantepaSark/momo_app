@@ -1,6 +1,25 @@
 # Next.js & NextUI Template
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
+This application calculates telco transaction fee and E-levy. Users can also subscribe to newsletter
+
+## Tarrifs used for this application
+
+## MTN
+
+0.5% of amount <= 50.00 for same network
+1% of amount > 50.00 for same network
+1.5% of amount for offnet
+
+## Telecel and AT
+
+No fee on same network
+0% of amount <= 100.00 for offnet
+0.5% of amount > 100.00 && <= 1000.00 for offnet
+5.00 of amount > 1000.00 for offnet
+
+## E-levy
+
+1.5% of amount
 
 [Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
 
