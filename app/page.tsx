@@ -14,32 +14,6 @@ import {
 } from "@nextui-org/react";
 import { CustomModal } from "@/components/modal";
 
-function checkNumberWithNetwork({ networkKey, phoneNumber }: any) {
-  let isValidNumber = true;
-
-  switch (networkKey) {
-    case "0": {
-      const prefixes = ["054", "024", "055", "059"];
-      isValidNumber = prefixes.some((prefix) => phoneNumber.startsWith(prefix));
-      break;
-    }
-    case "1": {
-      const prefixes = ["020", "050"];
-      isValidNumber = prefixes.some((prefix) => phoneNumber.startsWith(prefix));
-      break;
-    }
-    case "2": {
-      const prefixes = ["026", "027", "057", "056"];
-      isValidNumber = prefixes.some((prefix) => phoneNumber.startsWith(prefix));
-      break;
-    }
-
-    default:
-      isValidNumber = false;
-      break;
-  }
-}
-
 export default function Home() {
   const initialFormState = {
     senderNetwork: "",
