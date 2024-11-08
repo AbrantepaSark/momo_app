@@ -14,6 +14,32 @@ import {
 } from "@nextui-org/react";
 import { CustomModal } from "@/components/modal";
 
+function checkNumberWithNetwork({ networkKey, phoneNumber }: any) {
+  let isValidNumber = true;
+
+  switch (networkKey) {
+    case "0": {
+      const prefixes = ["054", "024", "055", "059"];
+      isValidNumber = prefixes.some((prefix) => phoneNumber.startsWith(prefix));
+      break;
+    }
+    case "1": {
+      const prefixes = ["020", "050"];
+      isValidNumber = prefixes.some((prefix) => phoneNumber.startsWith(prefix));
+      break;
+    }
+    case "2": {
+      const prefixes = ["026", "027", "057", "056"];
+      isValidNumber = prefixes.some((prefix) => phoneNumber.startsWith(prefix));
+      break;
+    }
+
+    default:
+      isValidNumber = false;
+      break;
+  }
+}
+
 export default function Home() {
   const initialFormState = {
     senderNetwork: "",
@@ -33,8 +59,44 @@ export default function Home() {
   const [joined, setJoined] = useState(false);
   const [charges, setCharges] = useState(0);
   const [validationErrors, setValidationErrors]: any = useState([]);
+  const [isMatch, setIsMatch] = useState(true);
 
   let amount = parseFloat(formData?.amount);
+
+  function checkNumberWithNetwork({ networkKey, phoneNumber }: any) {
+    let isValidNumber = true;
+    switch (networkKey) {
+      case "0": {
+        const prefixes = ["054", "024", "055", "059"];
+        isValidNumber = prefixes.some((prefix) =>
+          phoneNumber.startsWith(prefix)
+        );
+
+        break;
+      }
+      case "1": {
+        const prefixes = ["020", "050"];
+        isValidNumber = prefixes.some((prefix) =>
+          phoneNumber.startsWith(prefix)
+        );
+
+        break;
+      }
+      case "2": {
+        const prefixes = ["026", "027", "057", "056"];
+        isValidNumber = prefixes.some((prefix) =>
+          phoneNumber.startsWith(prefix)
+        );
+        //setIsMatch(isValidNumber);
+        break;
+      }
+
+      default:
+        //setIsMatch(true);
+        break;
+    }
+    return isValidNumber;
+  }
 
   //function to calculate E-levy
   const cal_Elevy = () => {
@@ -136,10 +198,27 @@ export default function Home() {
       setValidationErrors(errorList);
       return;
     }
-    setValidationErrors([]);
-    setIsModalOpen(true);
-    //calculate charges function
-    calculateCharges();
+
+    let numberCheck1 = checkNumberWithNetwork({
+      networkKey: formData?.senderNetwork,
+      phoneNumber: formData?.senderNumber,
+    });
+
+    let numberCheck2 = checkNumberWithNetwork({
+      networkKey: formData?.receiverNetwork,
+      phoneNumber: formData?.receiverNumber,
+    });
+
+    if (numberCheck1 && numberCheck2) {
+      setValidationErrors([]);
+      setIsModalOpen(true);
+      setIsMatch(true);
+      //calculate charges function
+      calculateCharges();
+      return;
+    }
+    setIsMatch(false);
+    return;
   };
 
   //handle joining newsletter submission
@@ -206,7 +285,16 @@ export default function Home() {
     <>
       <section className="flex w-full flex-col items-center justify-center text-sm lg:text-base gap-4 py-8 md:py-10">
         <h3 className="text-2xl font-bold">MoMo Transaction</h3>
-        <p className="text-sm mb-5 italic">Fill form below</p>
+        <p className="text-sm mb-5 italic"> Fill form below </p>
+        {isMatch ? null : (
+          <div
+            className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50"
+            role="alert"
+          >
+            <span className="font-semibold italic">Alert!</span> Network and
+            number mismatch
+          </div>
+        )}
         <div className=" w-full flex item-center justify-center">
           <div className="lg:w-1/2 md:w-3/5 w-full mx-3 lg:p-5 p-2">
             <div>
@@ -339,15 +427,6 @@ export default function Home() {
                     {cal_Elevy().toFixed(2)}
                   </p>
                 </div>
-                {/*showErrorAlert ? (
-                  <div
-                    className="p-4 my-4 text-sm bg-red-200 rounded-lg"
-                    role="alert"
-                  >
-                    <span className="font-medium">Alert!</span> Pass correct
-                    numbers and amount
-                  </div>
-                ) : null */}
                 <div className="flex my-8 gap-x-5">
                   <Button
                     type="reset"
